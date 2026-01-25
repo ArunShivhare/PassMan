@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from 'react'
 
 const Manager = () => {
   const ref = useRef()
+  const passwordRef = useRef()
 
   const [form, setform] = useState({ site: "", username: "", password: "" })
   const [passwordsArray, setpasswordsArray] = useState([])
@@ -17,11 +18,14 @@ const Manager = () => {
 
   const showPassword = () => {
     // alert("show the password")
+    passwordRef.current.type = "text"
     if (ref.current.src.includes("icons/eyecross.png")) {
       ref.current.src = "icons/eye.png"
+      passwordRef.current.type = "password"
     }
     else {
       ref.current.src = "icons/eyecross.png"
+      passwordRef.current.type = "text"
     }
   }
 
@@ -40,7 +44,7 @@ const Manager = () => {
 
   return (
     <>
-      <div class="absolute top-0 z-[-2] h-screen w-screen bg-white bg-[radial-gradient(100%_50%_at_50%_0%,rgba(0,163,255,0.13)_0,rgba(0,163,255,0)_50%,rgba(0,163,255,0)_100%)]"></div>
+      <div className="absolute top-0 z-[-2] h-screen w-screen bg-white bg-[radial-gradient(100%_50%_at_50%_0%,rgba(0,163,255,0.13)_0,rgba(0,163,255,0)_50%,rgba(0,163,255,0)_100%)]"></div>
 
       <div className="text-black mycontainer">
         <h1 className='font-bold text-4xl text-center'><span className='text-yellow-900'> &lt;</span>
@@ -53,7 +57,7 @@ const Manager = () => {
           <div className="flex w-full gap-5 justify-between">
             <input value={form.username} onChange={handleChange} placeholder='Enter Username' className='rounded-full border border-gray-500 w-full p-4 py-1' type="text" name="username" id="" />
             <div className="relative">
-              <input value={form.password} onChange={handleChange} placeholder='Enter Password' className='rounded-full border border-gray-500 w-full p-4 py-1' type="text" name="password" id="" />
+              <input ref={passwordRef} value={form.password} onChange={handleChange} placeholder='Enter Password' className='rounded-full border border-gray-500 w-full p-4 py-1' type="password" name="password" id="" />
               <span className='absolute right-[3px] top-[4px] cursor-pointer' onClick={showPassword}>
                 <img ref={ref} className='p-1' width={25} src="icons/eye.png" alt="" />
               </span>
@@ -68,32 +72,25 @@ const Manager = () => {
         </div>
         <div className="passwords">
           <h2 className='text-2xl font-bold py-4'>Your Passwords</h2>
-          <table class="table-auto w-full rounded-md overflow-hidden">
+          {passwordsArray.length === 0 && <div>There is no passwords to show</div>}
+          {passwordsArray.length != 0 && <table className="table-auto w-full rounded-md overflow-hidden">
             <thead className='bg-yellow-950 text-white'>
               <tr>
-                <th className='py-2'>Song</th>
-                <th className='py-2'>Artist</th>
-                <th className='py-2'>Year</th>
+                <th className='py-2'>Site</th>
+                <th className='py-2'>Username</th>
+                <th className='py-2'>Password</th>
               </tr>
             </thead>
             <tbody className='bg-yellow-50'>
-              <tr>
-              <td className='py-2 border border-white text-center w-32'>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-              <td className='py-2 border border-white text-center w-32'>Malcolm Lockyer</td>
-              <td className='py-2 border border-white text-center w-32'>1961</td>
+              {passwordsArray.map((item, index)=>{
+                return <tr key={index}>
+              <td className='py-2 border border-white text-center w-32'><a href={item.site} target='_blank'>{item.site}</a></td>
+              <td className='py-2 border border-white text-center w-32'>{item.username}</td>
+              <td className='py-2 border border-white text-center w-32'>{item.password}</td>
               </tr>
-              <tr>
-              <td className='py-2 border border-white text-center w-32'>Witchy Woman</td>
-              <td className='py-2 border border-white text-center w-32'>The Eagles</td>
-              <td className='py-2 border border-white text-center w-32'>1972</td>
-              </tr>
-              <tr>
-              <td className='py-2 border border-white text-center w-32'>Shining Star</td>
-              <td className='py-2 border border-white text-center w-32'>Earth, Wind, and Fire</td>
-              <td className='py-2 border border-white text-center w-32'>1975</td>
-              </tr>
+              })}
             </tbody>
-          </table>
+          </table>}
         </div>
       </div>
     </>

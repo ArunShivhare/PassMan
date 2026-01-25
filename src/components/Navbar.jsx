@@ -9,15 +9,18 @@ const Navbar = () => {
           <span className='text-yellow-900'> &lt;</span>
           Pass
           <span className='text-yellow-900'>Man/&gt;</span>
-          </div>
-        <ul>
-            <li className='flex gap-4'>
-                <a className='text-black hover:font-bold' href="/">Home</a>
-                <a className='text-black hover:font-bold' href="#">About</a>
-                <a className='text-black hover:font-bold' href="#">Contact</a>
-            </li>
-        </ul>
         </div>
+        <ul>
+          <li className='flex gap-4 items-center'>
+            {/* <a className='text-black hover:font-bold' href="/">Home</a>
+            <a className='text-black hover:font-bold' href="#">About</a>
+            <a className='text-black hover:font-bold' href="#">Contact</a> */}
+            <button>
+              <img className='p-2 w-11 hover:w-12' src="icons/github.svg" alt="" />
+            </button>
+          </li>
+        </ul>
+      </div>
     </nav>
   )
 }
