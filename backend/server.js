@@ -2,6 +2,7 @@ const express = require('express')
 const dotenv = require('dotenv')
 const { MongoClient } = require('mongodb');
 const bodyparser = require('body-parser')
+const cors = require('cors')
 
 dotenv.config()
 
@@ -14,6 +15,7 @@ const dbName = 'passman';
 const app = express()
 const port = 3000
 app.use(bodyparser.json())
+app.use(cors())
 
 client.connect();
 

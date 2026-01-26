@@ -11,11 +11,18 @@ const Manager = () => {
   const [form, setform] = useState({ site: "", username: "", password: "" })
   const [passwordsArray, setpasswordsArray] = useState([])
 
+  const getPasswords = async () => {
+    let req = await fetch("http://localhost:3000/")
+    let passwords = await req.json()
+    setpasswordsArray(passwords)
+  }
+
   useEffect(() => {
-    let passwords = localStorage.getItem("passwords");
-    if (passwords) {
-      setpasswordsArray(JSON.parse(passwords))
-    }
+    // let passwords = localStorage.getItem("passwords");
+    // if (passwords) {
+    //   setpasswordsArray(JSON.parse(passwords))
+    // }
+    getPasswords()
   }, [])
 
   const copyText = (text) => {
@@ -47,63 +54,77 @@ const Manager = () => {
     }
   }
 
-  const savePassword = () => {
+  const savePassword = async () => {
     // console.log(form)
-    if(form.site.length > 3 && form.username.length > 3 && form.password.length > 3){
-    setpasswordsArray([...passwordsArray, {...form, id: uuidv4()}])
-    localStorage.setItem("passwords", JSON.stringify([...passwordsArray, {...form, id: uuidv4()}]))
-    console.log([...passwordsArray, form])
-    setform({ site: "", username: "", password: "" })
-    toast('Password Saved', {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      // transition: Bounce,
-    });
-  }
-  else{
+    if (form.site.length > 3 && form.username.length > 3 && form.password.length > 3) {
+      // if any such id exists already
+      await fetch("http://localhost:3000/", {
+        method: "DELETE", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: form.id })
+      })
+
+      setpasswordsArray([...passwordsArray, { ...form, id: uuidv4() }])
+      await fetch("http://localhost:3000/", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, id: uuidv4() })
+      })
+      // localStorage.setItem("passwords", JSON.stringify([...passwordsArray, { ...form, id: uuidv4() }]))
+      // console.log([...passwordsArray, form])
+      setform({ site: "", username: "", password: "" })
+      toast('Password Saved', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        // transition: Bounce,
+      });
+    }
+    else {
       toast('Invalid Input', {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      // transition: Bounce,
-    });
-  }
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        // transition: Bounce,
+      });
+    }
   }
 
-  const deletePassword = (id) => {
+  const deletePassword = async (id) => {
     let c = confirm("Are you sure ?")
-    if(c){
-    setpasswordsArray(passwordsArray.filter(item=>item.id!==id))
-    localStorage.setItem("passwords", JSON.stringify(passwordsArray.filter(item=>item.id!==id)))
-    toast('Password Deleted', {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      // transition: Bounce,
-    });
+    if (c) {
+      setpasswordsArray(passwordsArray.filter(item => item.id !== id))
+      // localStorage.setItem("passwords", JSON.stringify(passwordsArray.filter(item => item.id !== id)))
+      let req = await fetch("http://localhost:3000/", {
+        method: "DELETE", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+      })
+      toast('Password Deleted', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        // transition: Bounce,
+      });
     }
     // console.log([...passwordsArray, form])
   }
 
-  const editPassword = (id) => {
-    setform(passwordsArray.filter(item=>item.id===id)[0])
-    setpasswordsArray(passwordsArray.filter(item=>item.id!==id))
+  const editPassword = async (id) => {
+    setform({...passwordsArray.filter(item => item.id === id)[0], id: id})
+    setpasswordsArray(passwordsArray.filter(item => item.id !== id))
     // localStorage.setItem("passwords", JSON.stringify([...passwordsArray, {...form, id: uuidv4()}]))
     // console.log([...passwordsArray, form])
   }
@@ -127,9 +148,9 @@ const Manager = () => {
         draggable
         pauseOnHover
         theme="light"
-        // transition={Bounce}
+      // transition={Bounce}
       />
-      
+
       <div className="absolute top-0 z-[-2] h-screen w-screen bg-white bg-[radial-gradient(100%_50%_at_50%_0%,rgba(0,163,255,0.13)_0,rgba(0,163,255,0)_50%,rgba(0,163,255,0)_100%)]"></div>
 
       <div className="text-black p-2 md:mycontainer">
@@ -173,7 +194,7 @@ const Manager = () => {
                 return <tr key={index}>
                   <td className='py-2 border border-white text-center'>
                     <div className='flex items-center justify-center'>
-                      <a href={item.site} target='_blank'>{item.site}</a>
+                      <a href={item.site} target='_blank'><span>{item.site}</span></a>
                       <div className='cursor-pointer size-6 px-2' onClick={() => { copyText(item.site) }}>
                         <lord-icon
                           src="https://cdn.lordicon.com/iykgtsbt.json"
@@ -184,7 +205,7 @@ const Manager = () => {
                   </td>
                   <td className='py-2 border border-white text-center'>
                     <div className='flex items-center justify-center'>
-                      {item.username}
+                      <span>{item.username}</span>
                       <div className='cursor-pointer size-6 px-2' onClick={() => { copyText(item.username) }}>
                         <lord-icon
                           src="https://cdn.lordicon.com/iykgtsbt.json"
@@ -195,7 +216,7 @@ const Manager = () => {
                   </td>
                   <td className='py-2 border border-white text-center'>
                     <div className='flex items-center justify-center'>
-                      {item.password}
+                      <span>{"*".repeat(item.password.length)}</span>
                       <div className='cursor-pointer size-6 px-2' onClick={() => { copyText(item.password) }}>
                         <lord-icon
                           src="https://cdn.lordicon.com/iykgtsbt.json"
@@ -205,13 +226,13 @@ const Manager = () => {
                     </div>
                   </td>
                   <td className='py-2 border border-white text-center'>
-                    <span className='cursor-pointer px-1' onClick={()=>{editPassword(item.id)}}>
+                    <span className='cursor-pointer px-1' onClick={() => { editPassword(item.id) }}>
                       <lord-icon className='size-6'
                         src="https://cdn.lordicon.com/gwlusjdu.json"
                         trigger="hover">
                       </lord-icon>
                     </span>
-                    <span className='cursor-pointer px-1' onClick={()=>{deletePassword(item.id)}}>
+                    <span className='cursor-pointer px-1' onClick={() => { deletePassword(item.id) }}>
                       <lord-icon className='size-6'
                         src="https://cdn.lordicon.com/skkahier.json"
                         trigger="hover">
