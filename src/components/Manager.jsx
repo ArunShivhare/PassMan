@@ -53,6 +53,17 @@ const Manager = () => {
     localStorage.setItem("passwords", JSON.stringify([...passwordsArray, {...form, id: uuidv4()}]))
     console.log([...passwordsArray, form])
     setform({ site: "", username: "", password: "" })
+    toast('Password Saved', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      // transition: Bounce,
+    });
   }
 
   const deletePassword = (id) => {
@@ -60,6 +71,17 @@ const Manager = () => {
     if(c){
     setpasswordsArray(passwordsArray.filter(item=>item.id!==id))
     localStorage.setItem("passwords", JSON.stringify(passwordsArray.filter(item=>item.id!==id)))
+    toast('Password Deleted', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      // transition: Bounce,
+    });
     }
     // console.log([...passwordsArray, form])
   }
