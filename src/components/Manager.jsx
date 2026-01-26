@@ -49,6 +49,7 @@ const Manager = () => {
 
   const savePassword = () => {
     // console.log(form)
+    if(form.site.length > 3 && form.username.length > 3 && form.password.length > 3){
     setpasswordsArray([...passwordsArray, {...form, id: uuidv4()}])
     localStorage.setItem("passwords", JSON.stringify([...passwordsArray, {...form, id: uuidv4()}]))
     console.log([...passwordsArray, form])
@@ -64,6 +65,20 @@ const Manager = () => {
       theme: "light",
       // transition: Bounce,
     });
+  }
+  else{
+      toast('Invalid Input', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      // transition: Bounce,
+    });
+  }
   }
 
   const deletePassword = (id) => {
@@ -117,18 +132,18 @@ const Manager = () => {
       
       <div className="absolute top-0 z-[-2] h-screen w-screen bg-white bg-[radial-gradient(100%_50%_at_50%_0%,rgba(0,163,255,0.13)_0,rgba(0,163,255,0)_50%,rgba(0,163,255,0)_100%)]"></div>
 
-      <div className="text-black mycontainer">
+      <div className="text-black p-2 md:mycontainer">
         <h1 className='font-bold text-4xl text-center'><span className='text-yellow-900'> &lt;</span>
           Pass
           <span className='text-yellow-900'>Man/&gt;</span>
         </h1>
         <p className='text-lg text-center'>Hey, I am here to manage your Passwords</p>
         <div className="flex flex-col p-4 text-black gap-3 items-center">
-          <input value={form.site} onChange={handleChange} placeholder='Enter website URL' className='rounded-full border border-gray-500 w-full p-4 py-1' type="text" name="site" id="" />
-          <div className="flex w-full gap-5 justify-between">
-            <input value={form.username} onChange={handleChange} placeholder='Enter Username' className='rounded-full border border-gray-500 w-full p-4 py-1' type="text" name="username" id="" />
+          <input value={form.site} onChange={handleChange} placeholder='Enter website URL' className='rounded-full border border-gray-500 w-full p-4 py-1' type="text" name="site" id="site" />
+          <div className="flex flex-col md:flex-row w-full gap-5 justify-between">
+            <input value={form.username} onChange={handleChange} placeholder='Enter Username' className='rounded-full border border-gray-500 w-full p-4 py-1' type="text" name="username" id="username" />
             <div className="relative">
-              <input ref={passwordRef} value={form.password} onChange={handleChange} placeholder='Enter Password' className='rounded-full border border-gray-500 w-full p-4 py-1' type="password" name="password" id="" />
+              <input ref={passwordRef} value={form.password} onChange={handleChange} placeholder='Enter Password' className='rounded-full border border-gray-500 w-full p-4 py-1' type="password" name="password" id="password" />
               <span className='absolute right-[3px] top-[4px] cursor-pointer' onClick={showPassword}>
                 <img ref={ref} className='p-1' width={25} src="icons/eye.png" alt="" />
               </span>
@@ -144,7 +159,7 @@ const Manager = () => {
         <div className="passwords">
           <h2 className='text-2xl font-bold py-4'>Your Passwords</h2>
           {passwordsArray.length === 0 && <div>There is no passwords to show</div>}
-          {passwordsArray.length != 0 && <table className="table-auto w-full rounded-md overflow-hidden">
+          {passwordsArray.length != 0 && <table className="table-auto w-full mb-5 rounded-md overflow-hidden">
             <thead className='bg-yellow-950 text-white'>
               <tr>
                 <th className='py-2'>Site</th>
