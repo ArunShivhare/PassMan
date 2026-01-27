@@ -1,16 +1,23 @@
-# React + Vite
+# 🚀 PassMan - Password Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Developed PassMan, a secure password manager using the MERN stack (MongoDB, Express.js, React, Node.js) to store and manage user credentials.
+Implemented RESTful APIs for secure CRUD operations, ensuring efficient data handling between frontend and backend.
+Designed a responsive and intuitive UI using React and Tailwind CSS, focusing on usability and clean design.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Tech Stack
+React, Express, Node, MongoDB
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📷 Screenshots
+<img width="1919" height="1034" alt="Screenshot 2026-01-27 222105" src="https://github.com/user-attachments/assets/40caa657-5b71-4dbf-a093-e565e0bcb104" />
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ⚙️ Installation & Setup
+1. Clone the repository  
+   ```bash
+   git clone https://github.com/your-username/project-name.git
