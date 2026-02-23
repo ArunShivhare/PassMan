@@ -1,50 +1,49 @@
-const express = require('express')
-const dotenv = require('dotenv')
-const { MongoClient } = require('mongodb');
-const bodyparser = require('body-parser')
-const cors = require('cors')
+const express = require("express");
+const dotenv = require("dotenv");
+const { MongoClient } = require("mongodb");
+const cors = require("cors");
 
-dotenv.config()
+dotenv.config();
 
-// Connection URL
-const url = process.env.MONGO_URI;
-const client = new MongoClient(url);
+const app = express();
+app.use(express.json());
+app.use(cors());
 
-// Database Name
-const dbName = 'passman';
-const app = express()
-const port = 3000
-app.use(bodyparser.json())
-app.use(cors())
+const port = process.env.PORT || 3000;
 
-client.connect();
+const client = new MongoClient(process.env.MONGO_URI);
+const dbName = "passman";
 
-// Get all the passwords
-app.get('/', async(req, res) => {
-  const db = client.db(dbName);
-  const collection = db.collection('passwords');  
-  const findResult = await collection.find({}).toArray();
-  res.json(findResult)
-})
+async function startServer() {
+  try {
+    await client.connect();
+    console.log("✅ MongoDB connected");
 
-// Save a password
-app.post('/', async(req, res) => {
-  const password = req.body
-  const db = client.db(dbName);
-  const collection = db.collection('passwords');  
-  const findResult = await collection.insertOne(password);
-  res.send({success: true, result: findResult})
-})
+    const db = client.db(dbName);
+    const collection = db.collection("passwords");
 
-// Delete a password by id
-app.delete('/', async(req, res) => {
-  const password = req.body
-  const db = client.db(dbName);
-  const collection = db.collection('passwords');  
-  const findResult = await collection.deleteOne(password);
-  res.send({success: true, result: findResult})
-})
+    app.get("/", async (req, res) => {
+      const data = await collection.find({}).toArray();
+      res.json(data);
+    });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port http://localhost:${port}`)
-})
+    app.post("/", async (req, res) => {
+      const result = await collection.insertOne(req.body);
+      res.json({ success: true, result });
+    });
+
+    app.delete("/", async (req, res) => {
+      const result = await collection.deleteOne(req.body);
+      res.json({ success: true, result });
+    });
+
+    app.listen(port, () => {
+      console.log(`🚀 Server running on port ${port}`);
+    });
+
+  } catch (err) {
+    console.error("❌ Failed to connect MongoDB:", err);
+  }
+}
+
+startServer();
