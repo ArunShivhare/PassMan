@@ -12,10 +12,10 @@ const Manager = () => {
   const [passwordsArray, setpasswordsArray] = useState([])
 
   const getPasswords = async () => {
-    let req = await fetch("https://passman-mjsm.onrender.com")
-    let passwords = await req.json()
-    setpasswordsArray(passwords)
-  }
+  const res = await fetch("https://passman-mjsm.onrender.com");
+  const data = await res.json();
+  setpasswordsArray(data);
+};
 
   useEffect(() => {
     // let passwords = localStorage.getItem("passwords");
@@ -58,19 +58,35 @@ const Manager = () => {
     // console.log(form)
     if (form.site.length > 3 && form.username.length > 3 && form.password.length > 3) {
       // if any such id exists already
-      await fetch("https://passman-mjsm.onrender.com", {
-        method: "DELETE", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: form.id })
-      })
 
-      setpasswordsArray([...passwordsArray, { ...form, id: uuidv4() }])
-      await fetch("https://passman-mjsm.onrender.com", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, id: uuidv4() })
-      })
+      // await fetch("https://passman-mjsm.onrender.com", {
+      //   method: "DELETE", headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ id: form.id })
+      // })
+
+      // setpasswordsArray([...passwordsArray, { ...form, id: uuidv4() }])
+      // await fetch("https://passman-mjsm.onrender.com", {
+      //   method: "POST", headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ ...form, id: uuidv4() })
+      // })
+      // setform({ site: "", username: "", password: "" })
+
       // localStorage.setItem("passwords", JSON.stringify([...passwordsArray, { ...form, id: uuidv4() }]))
       // console.log([...passwordsArray, form])
-      setform({ site: "", username: "", password: "" })
+
+       const res = await fetch("https://passman-mjsm.onrender.com", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form)
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      await getPasswords();
+      setform({ site: "", username: "", password: "" });
+    }
+    
       toast('Password Saved', {
         position: "top-right",
         autoClose: 5000,
@@ -101,12 +117,23 @@ const Manager = () => {
   const deletePassword = async (id) => {
     let c = confirm("Are you sure ?")
     if (c) {
-      setpasswordsArray(passwordsArray.filter(item => item.id !== id))
+      // setpasswordsArray(passwordsArray.filter(item => item.id !== id))
+
       // localStorage.setItem("passwords", JSON.stringify(passwordsArray.filter(item => item.id !== id)))
-      let req = await fetch("https://passman-mjsm.onrender.com", {
-        method: "DELETE", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id })
-      })
+
+      // let req = await fetch("https://passman-mjsm.onrender.com", {
+      //   method: "DELETE", headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ id })
+      // })
+
+      await fetch("https://passman-mjsm.onrender.com", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id })
+    });
+
+    getPasswords();
+
       toast('Password Deleted', {
         position: "top-right",
         autoClose: 5000,
@@ -123,8 +150,12 @@ const Manager = () => {
   }
 
   const editPassword = async (id) => {
-    setform({...passwordsArray.filter(item => item.id === id)[0], id: id})
-    setpasswordsArray(passwordsArray.filter(item => item.id !== id))
+    // setform({...passwordsArray.filter(item => item.id === id)[0], id: id})
+    // setpasswordsArray(passwordsArray.filter(item => item.id !== id))
+
+    const item = passwordsArray.find(i => i._id === id);
+  setform(item);
+
     // localStorage.setItem("passwords", JSON.stringify([...passwordsArray, {...form, id: uuidv4()}]))
     // console.log([...passwordsArray, form])
   }
@@ -190,8 +221,8 @@ const Manager = () => {
               </tr>
             </thead>
             <tbody className='bg-yellow-50'>
-              {passwordsArray.map((item, index) => {
-                return <tr key={index}>
+              {passwordsArray.map((item ) => {
+                return <tr key={item._id}>
                   <td className='py-2 border border-white text-center'>
                     <div className='flex items-center justify-center'>
                       <a href={item.site} target='_blank'><span>{item.site}</span></a>
