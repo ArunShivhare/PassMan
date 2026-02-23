@@ -12,10 +12,10 @@ const Manager = () => {
   const [passwordsArray, setpasswordsArray] = useState([])
 
   const getPasswords = async () => {
-  const res = await fetch("https://passman-mjsm.onrender.com");
-  const data = await res.json();
-  setpasswordsArray(data);
-};
+    const res = await fetch("https://passman-mjsm.onrender.com");
+    const data = await res.json();
+    setpasswordsArray(data);
+  };
 
   useEffect(() => {
     // let passwords = localStorage.getItem("passwords");
@@ -74,19 +74,30 @@ const Manager = () => {
       // localStorage.setItem("passwords", JSON.stringify([...passwordsArray, { ...form, id: uuidv4() }]))
       // console.log([...passwordsArray, form])
 
-       const res = await fetch("https://passman-mjsm.onrender.com", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form)
-    });
+      // If editing existing entry → delete old one first
+      if (form._id) {
+        await fetch("https://passman-mjsm.onrender.com", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: form._id })
+        });
+      }
 
-    const data = await res.json();
+      // Save new/updated
+      await fetch("https://passman-mjsm.onrender.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
 
-    if (data.success) {
       await getPasswords();
-      setform({ site: "", username: "", password: "" });
-    }
-    
+
+      setform({
+        site: "",
+        username: "",
+        password: ""
+      });
+
       toast('Password Saved', {
         position: "top-right",
         autoClose: 5000,
@@ -127,12 +138,12 @@ const Manager = () => {
       // })
 
       await fetch("https://passman-mjsm.onrender.com", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
-    });
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+      });
 
-    getPasswords();
+      getPasswords();
 
       toast('Password Deleted', {
         position: "top-right",
@@ -154,7 +165,8 @@ const Manager = () => {
     // setpasswordsArray(passwordsArray.filter(item => item.id !== id))
 
     const item = passwordsArray.find(i => i._id === id);
-  setform(item);
+    if (!item) return;
+    setform(item);
 
     // localStorage.setItem("passwords", JSON.stringify([...passwordsArray, {...form, id: uuidv4()}]))
     // console.log([...passwordsArray, form])
@@ -221,7 +233,7 @@ const Manager = () => {
               </tr>
             </thead>
             <tbody className='bg-yellow-50'>
-              {passwordsArray.map((item ) => {
+              {passwordsArray.map((item) => {
                 return <tr key={item._id}>
                   <td className='py-2 border border-white text-center'>
                     <div className='flex items-center justify-center'>
@@ -257,13 +269,13 @@ const Manager = () => {
                     </div>
                   </td>
                   <td className='py-2 border border-white text-center'>
-                    <span className='cursor-pointer px-1' onClick={() => { editPassword(item.id) }}>
+                    <span className='cursor-pointer px-1' onClick={() => { editPassword(item._id) }}>
                       <lord-icon className='size-6'
                         src="https://cdn.lordicon.com/gwlusjdu.json"
                         trigger="hover">
                       </lord-icon>
                     </span>
-                    <span className='cursor-pointer px-1' onClick={() => { deletePassword(item.id) }}>
+                    <span className='cursor-pointer px-1' onClick={() => { deletePassword(item._id) }}>
                       <lord-icon className='size-6'
                         src="https://cdn.lordicon.com/skkahier.json"
                         trigger="hover">
