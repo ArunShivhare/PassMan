@@ -2,7 +2,7 @@ import React from 'react'
 
 const Navbar = () => {
   return (
-    <nav className='bg-white'>
+    <nav className='bg-white/80 backdrop-blur-md shadow-sm border-b border-yellow-100 sticky top-0 z-10'>
       {/* can add mycontainer utility made in index.css */}
       <div className="flex justify-between items-center px-5 py-5 h-12">
         <div className='logo font-bold text-2xl'>
