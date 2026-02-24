@@ -15,9 +15,17 @@ const Navbar = () => {
             {/* <a className='text-black hover:font-bold' href="/">Home</a>
             <a className='text-black hover:font-bold' href="#">About</a>
             <a className='text-black hover:font-bold' href="#">Contact</a> */}
-            <button>
-              <img className='p-2 w-11 hover:w-12' src="icons/github.svg" alt="" />
-            </button>
+            <a
+              href="https://github.com/ArunShivhare"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                className="p-2 w-11 hover:w-12 transition-all duration-200"
+                src="icons/github.svg"
+                alt="GitHub"
+              />
+            </a>
           </li>
         </ul>
       </div>
