@@ -2,7 +2,7 @@ import React from 'react'
 import { useRef, useState, useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid';
-// import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Manager = () => {
   const ref = useRef()
@@ -204,20 +204,6 @@ const Manager = () => {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      // transition={Bounce}
-      />
-
       {/* Background */}
       <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-100 py-10 px-4 pb-28">
 
