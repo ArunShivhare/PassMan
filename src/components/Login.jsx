@@ -41,7 +41,7 @@ const Login = ({ setIsLoggedIn }) => {
   };
 
   return (
-     <div className="h-screen overflow-hidden bg-gradient-to-br from-yellow-50 via-white to-yellow-100 flex items-center justify-center px-4">
+     <div className="min-h-[90vh] overflow-hidden bg-gradient-to-br from-yellow-50 via-white to-yellow-100 flex items-center justify-center px-4">
 
     <div className="bg-white/70 backdrop-blur-lg shadow-2xl rounded-2xl p-10 w-full max-w-md border border-yellow-200">
 
