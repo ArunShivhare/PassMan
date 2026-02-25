@@ -1,20 +1,20 @@
-import React from 'react'
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ setIsLoggedIn, isLoggedIn }) => {
+  const navigate = useNavigate();
+
   return (
-    <nav className='bg-white/80 backdrop-blur-md shadow-sm border-b border-yellow-100 sticky top-0 z-10'>
-      {/* can add mycontainer utility made in index.css */}
+    <nav className="bg-white/80 backdrop-blur-md shadow-sm border-b border-yellow-100 sticky top-0 z-10">
       <div className="flex justify-between items-center px-5 py-5 h-12">
-        <div className='logo font-bold text-2xl'>
-          <span className='text-yellow-900'> &lt;</span>
+        <div className="logo font-bold text-2xl">
+          <span className="text-yellow-900"> &lt;</span>
           Pass
-          <span className='text-yellow-900'>Man/&gt;</span>
+          <span className="text-yellow-900">Man/&gt;</span>
         </div>
-        <ul>
-          <li className='flex gap-4 items-center'>
-            {/* <a className='text-black hover:font-bold' href="/">Home</a>
-            <a className='text-black hover:font-bold' href="#">About</a>
-            <a className='text-black hover:font-bold' href="#">Contact</a> */}
+
+        <ul className="flex items-center">
+          <li className="flex gap-4 items-center">
             <a
               href="https://github.com/ArunShivhare"
               target="_blank"
@@ -27,10 +27,24 @@ const Navbar = () => {
               />
             </a>
           </li>
+
+          <li>
+          {isLoggedIn && (
+            <button
+              onClick={() => {
+                localStorage.removeItem("token");
+                setIsLoggedIn(false);
+                navigate("/login");
+              }}
+            >
+              Logout
+            </button>
+          )}
+          </li>
         </ul>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
