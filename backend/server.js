@@ -19,7 +19,7 @@ const dbName = "passman";
 async function startServer() {
   try {
     await client.connect();
-    console.log("✅ MongoDB Connected");
+    console.log("MongoDB Connected");
 
     const db = client.db(dbName);
     const passwordsCollection = db.collection("passwords");
@@ -63,7 +63,7 @@ async function startServer() {
 
       const existingUser = await usersCollection.findOne({ email });
 
-      // 🔹 Register new user
+      //  Register new user
       if (!existingUser) {
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -85,7 +85,7 @@ async function startServer() {
         });
       }
 
-      // 🔹 Login existing user
+      //  Login existing user
       const isMatch = await bcrypt.compare(password, existingUser.password);
 
       if (!isMatch) {
@@ -110,7 +110,7 @@ async function startServer() {
 
     // ================= PASSWORD ROUTES =================
 
-    // 🔐 GET passwords (user specific)
+    //  GET passwords (user specific)
     app.get("/", verifyToken, async (req, res) => {
       const data = await passwordsCollection
         .find({ userId: req.userId })
@@ -119,7 +119,7 @@ async function startServer() {
       res.json(data);
     });
 
-    // 🔐 ADD password (attach userId)
+    //  ADD password (attach userId)
     app.post("/", verifyToken, async (req, res) => {
       const { _id, ...data } = req.body;
 
@@ -132,7 +132,7 @@ async function startServer() {
       res.json({ success: true, result });
     });
 
-    // 🔐 DELETE password (only if belongs to user)
+    //  DELETE password (only if belongs to user)
     app.delete("/", verifyToken, async (req, res) => {
       const { id } = req.body;
 
@@ -145,11 +145,11 @@ async function startServer() {
     });
 
     app.listen(port, () => {
-      console.log(`🚀 Server running on port ${port}`);
+      console.log(` Server running on port ${port}`);
     });
 
   } catch (err) {
-    console.error("❌ DB Error:", err);
+    console.error(" DB Error:", err);
   }
 }
 
