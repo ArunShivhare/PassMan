@@ -11,8 +11,8 @@ React, Express, Node, MongoDB
 
 ---
 
-## 📷 Screenshots
-<img width="1919" height="1034" alt="Screenshot 2026-01-27 222105" src="https://github.com/user-attachments/assets/40caa657-5b71-4dbf-a093-e565e0bcb104" />
+## Live
+[View Site](https://pass-man-one.vercel.app/)
 
 
 ---
