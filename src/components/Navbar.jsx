@@ -17,7 +17,7 @@ const Navbar = ({ setIsLoggedIn, isLoggedIn }) => {
 
         {/* Desktop Actions */}
         <div className="flex items-center gap-3">
-          <a
+          {/* <a
             href="https://github.com/ArunShivhare"
             target="_blank"
             rel="noopener noreferrer"
@@ -29,7 +29,7 @@ const Navbar = ({ setIsLoggedIn, isLoggedIn }) => {
               alt="GitHub"
             />
             <span className="hidden sm:block text-xs font-bold uppercase tracking-wider">Source</span>
-          </a>
+          </a> */}
 
           {isLoggedIn && (
             <button
